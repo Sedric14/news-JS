@@ -1,3 +1,5 @@
+import { DataSource } from "../view/appView";
+
 interface IA {
     endpoint: string;
     options: object;
@@ -53,11 +55,11 @@ class Loader {
                 console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
             throw Error(res.statusText);
                 }
-return res.json() as Promise<object>
+              return res.json() as Promise<DataSource>
             })
             // .then(res => res.json())
-            // .then((data) => callback(data))
-            .catch((err) => console.error(err));
+            .then(data => callback())
+            .catch(err => console.error(err));
     }
 }
 
