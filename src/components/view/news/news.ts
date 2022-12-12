@@ -1,29 +1,17 @@
+import { Articles } from '../../../types';
 import './news.css';
-// import '../sources/sources/Srcs'
-import { Srcs } from '../sources/sources';
-
-type NewsData = {
-    source: Srcs;
-    author: string;
-    title: string;
-    description: string;
-    url: string;
-    urlToImage: string;
-    publishedAt: string;
-    content: string;
-}
 
 class News {
-    draw(data: NewsData[]) {
+    draw(data: Articles[]) {
         const news = data.length >= 10 ? data.filter((_item, idx) => idx < 10) : data;
 
         const fragment = document.createDocumentFragment();
-        const newsItemTemp = document.querySelector('#newsItemTemp')as HTMLElement;
+        const newsItemTemp = document.querySelector('#newsItemTemp');
 
         news.forEach((item, idx) => {
-            const newsClone = newsItemTemp.cloneNode(true) as HTMLElement;
-            if(newsClone){
-                if (idx % 2 ) newsClone.querySelector('.news__item')!.classList.add('alt');
+            const newsClone = newsItemTemp!.cloneNode(true) as HTMLElement;
+
+            if (idx % 2) newsClone.querySelector('.news__item')!.classList.add('alt');
 
             newsClone.querySelector<HTMLElement>('.news__meta-photo')!.style.backgroundImage = `url(${
                 item.urlToImage || 'img/news_placeholder.jpg'
@@ -41,9 +29,6 @@ class News {
             newsClone.querySelector('.news__read-more a')!.setAttribute('href', item.url);
 
             fragment.append(newsClone);
-            }
-
-            
         });
 
         document.querySelector('.news')!.innerHTML = '';
@@ -51,5 +36,5 @@ class News {
     }
 }
 
+
 export default News;
-export {NewsData}

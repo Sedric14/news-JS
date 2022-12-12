@@ -1,21 +1,20 @@
+import { Data } from '../../types';
 import AppController from '../controller/controller';
-import { AppView, DataSource } from '../view/appView';
+import { AppView } from '../view/appView';
 
 class App {
-    controller: AppController
-    view: AppView
+    controller: AppController;
+    view: AppView;
     constructor() {
         this.controller = new AppController();
         this.view = new AppView();
     }
 
     start() {
-        const source = document.querySelector('.sources');
-        if (source !== null) {
-            source.addEventListener('click', (e) => this.controller.getNews(e, (data) => this.view.drawNews(data as DataSource)));
+        document.querySelector('.sources')!
+            .addEventListener('click', (e) => this.controller.getNews(e, (data) => this.view.drawNews(data as Data)));
         this.controller.getSources((data) => this.view.drawSources(data as AppView));
-        }
-        }
+    }
 }
 
-export {App}
+export default App;

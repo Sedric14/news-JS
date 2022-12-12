@@ -1,7 +1,4 @@
-// export {};
-
-import {App} from './components/app/app';
-// import A
+import App from './components/app/app';
 import './global.css';
 
 const app = new App();

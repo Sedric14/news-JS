@@ -1,23 +1,20 @@
-import { DataSource } from "../view/appView";
+import { Data } from "../../types";
 
-interface IA {
+type AI = {
     endpoint: string;
-    options: object;
+    options?: {};
 }
 
 class Loader {
     baseLink: string;
     options: object;
-    
-    constructor(baseLink: string, options: object) {
+    constructor(baseLink:string, options:object) {
         this.baseLink = baseLink;
         this.options = options;
     }
 
-    
-
     getResp(
-        { endpoint, options = {} }: IA,
+        { endpoint, options = {} }: AI,
         callback = () => {
             console.error('No callback for GET response');
         }
@@ -25,41 +22,33 @@ class Loader {
         this.load('GET', endpoint, callback, options);
     }
 
-    // errorHandler(res) {
-    //     if (!res.ok) {
-    //         if (res.status === 401 || res.status === 404)
-    //             console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
-    //         throw Error(res.statusText);
-    //     }
+    errorHandler(res:Response) {
+        if (!res.ok) {
+            if (res.status === 401 || res.status === 404)
+                console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
+            throw Error(res.statusText);
+        }
 
-    //     return res;
-    // }
+        return res;
+    }
 
     makeUrl(options: object, endpoint:string) {
         const urlOptions: { [key:string]:string} = { ...this.options, ...options };
-        let url: string = `${this.baseLink}${endpoint}?`;
+        let url = `${this.baseLink}${endpoint}?`;
 
         Object.keys(urlOptions).forEach((key) => {
-            // url += key + urlOptions[key]
             url += `${key}=${urlOptions[key]}&`;
         });
 
         return url.slice(0, -1);
     }
 
-    load(method: string, endpoint: string, callback:()=>void, options = {}) {
+    load(method: string, endpoint: string, callback: (d?:Data)=>void, options = {}) {
         fetch(this.makeUrl(options, endpoint), { method })
-            .then(res => {
-                if (!res.ok) {
-            if (res.status === 401 || res.status === 404)
-                console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
-            throw Error(res.statusText);
-                }
-              return res.json() as Promise<DataSource>
-            })
-            // .then(res => res.json())
-            .then(data => callback())
-            .catch(err => console.error(err));
+            .then(this.errorHandler)
+            .then(res => res.json()as Promise<Data>)
+            .then(data => callback(data))
+            // .catch(err => console.error(err as Error));
     }
 }
 

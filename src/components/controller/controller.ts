@@ -4,19 +4,18 @@ class AppController extends AppLoader {
     getSources(callback: <T>(d? : T)=> void) {
         super.getResp(
             {
-            endpoint: 'sources',
-              options: {}
+                endpoint: 'sources',
             },
             callback
         );
     }
 
     getNews(e: Event, callback: <T>(d? : T)=> void) {
-        let target = e.target as Element;
-        const newsContainer = e.currentTarget as Element;
+        let target = e.target as HTMLElement;
+        const newsContainer = e.currentTarget as HTMLElement;
 
         while (target !== newsContainer) {
-            if (target.classList.contains('source__item')) {
+            if (target!.classList.contains('source__item')) {
                 const sourceId = target.getAttribute('data-source-id');
                 if (newsContainer.getAttribute('data-source') !== sourceId) {
                     newsContainer.setAttribute('data-source', sourceId as string);
@@ -32,7 +31,7 @@ class AppController extends AppLoader {
                 }
                 return;
             }
-            target = target.parentNode as Element;
+            target = target.parentNode as HTMLElement;
         }
     }
 }

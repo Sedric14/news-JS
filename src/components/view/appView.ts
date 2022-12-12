@@ -1,31 +1,24 @@
-import News, { NewsData } from './news/news';
-import Sources, { Srcs } from './sources/sources';
+import { Data, Source } from '../../types';
+import News from './news/news';
+import Sources from './sources/sources';
 
-
-type DataSource = {
-    status: string;
-    totalResults: number;
-    articles: NewsData[]
-}
-
-class AppView {
-    news: News
-    sources: Sources
+export class AppView {
+    news: News;
+    sources: Sources;
     constructor() {
         this.news = new News();
         this.sources = new Sources();
     }
 
-    drawNews(data: DataSource) {
+    drawNews(data: Data) {
         const values = data?.articles ? data?.articles : [];
         this.news.draw(values);
     }
 
-    drawSources(data:AppView) {
+    drawSources(data: this) {
         const values = data?.sources ? data?.sources : [];
-        this.sources.draw(values as Srcs[]);
+        this.sources.draw(values as Source[]);
     }
 }
 
-export { AppView };
-export { DataSource };
+export default AppView;
